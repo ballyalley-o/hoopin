@@ -17,7 +17,7 @@ const config: Config = {
     '^model/(.*)$': '<rootDir>/src/model/$1',
     '^route$': '<rootDir>/src/route/$1',
     '^route/(.*)$': '<rootDir>/src/route/$1',
-    '^myapp$': '<rootDir>/src/config/index.ts',
+    '^hoopin$': '<rootDir>/src/config/index.ts',
     '^utility$': '<rootDir>/src/utility/$1',
   },
   moduleFileExtensions: ['ts', 'js', 'json'],
