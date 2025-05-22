@@ -1,19 +1,20 @@
 /// <reference types="jest" />
 import express from 'express'
-import { App } from 'myapp'
-import { GLOBAL } from 'config/global'
+import { App } from 'hoopin'
 import request from 'supertest'
-import mongoose from 'mongoose'
+import { PrismaClient } from '@prisma/client'
+import { randomUUID } from 'crypto'
+
+const prisma = new PrismaClient()
 
 let app: express.Application
 
 beforeAll(async () => {
-  await mongoose.connect(GLOBAL.DB_URI || '')
   app = await App.app()
 })
 
 afterAll(async () => {
-  await mongoose.connection.close()
+  await prisma.$disconnect()
 })
 
 describe('User Route', () => {
@@ -59,7 +60,7 @@ describe('User Route', () => {
   })
 
   it('should throw unsuccessful response if user does not exist', async () => {
-    const fakeId = new mongoose.Types.ObjectId().toHexString()
+    const fakeId = randomUUID()
     const res    = await request(app).put(`/api/v1/auth/user/${fakeId}`).send({ firstname: 'Ghosty' })
 
     expect(res.statusCode).toBe(404)
@@ -73,7 +74,7 @@ describe('User Route', () => {
     expect(res.body.data).toStrictEqual({})
   })
    it('should throw unsuccessful response if user does not exist before delete', async () => {
-    const fakeId = new mongoose.Types.ObjectId().toHexString()
+    const fakeId = randomUUID()
     const res    = await request(app).delete(`/api/v1/auth/user/${fakeId}`).send({ firstname: 'Huey' })
 
     expect(res.statusCode).toBe(404)
