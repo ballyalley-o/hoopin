@@ -1,7 +1,7 @@
 /// <reference types="jest" />
 
 import express from 'express'
-import { App } from 'myapp'
+import { App } from 'hoopin'
 import { GLOBAL } from 'config/global'
 import request from 'supertest'
 import mongoose from 'mongoose'
