@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { GLOBAL } from 'myapp'
+import { GLOBAL } from 'hoopin'
 import { CODE } from 'constant'
 
 abstract class AbstractLogger {

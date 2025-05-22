@@ -1,5 +1,5 @@
 import winston from 'winston'
-import { GLOBAL } from 'myapp'
+import { GLOBAL } from 'hoopin'
 import { KEY } from 'constant'
 
 export const logger = winston.createLogger({

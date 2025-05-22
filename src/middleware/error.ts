@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express"
-import { GLOBAL } from 'myapp'
+import { GLOBAL } from 'hoopin'
 import { KEY, RESPONSE, CODE } from "constant"
 
 

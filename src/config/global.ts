@@ -2,7 +2,7 @@ import dotenv from 'dotenv'
 dotenv.config()
 
 export const GLOBAL = {
-  APP_NAME       : process.env.APP_NAME || 'myapp',
+  APP_NAME       : process.env.APP_NAME || 'hoopin',
   ENV            : process.env.ENV || 'development',
   PORT           : process.env.PORT || 3007,
   API_URL        : process.env.API_URL || '',

@@ -1,4 +1,4 @@
-import { GLOBAL } from 'myapp'
+import { GLOBAL } from 'hoopin'
 import { Response, NextFunction  } from 'express'
 import jwt from 'jsonwebtoken'
 import { User } from 'model'

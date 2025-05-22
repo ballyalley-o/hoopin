@@ -1,4 +1,4 @@
-import { App } from 'myapp'
+import { App } from 'hoopin'
 import goodlog from "good-logs"
 import { User } from 'model'
 import { user } from '_mock'

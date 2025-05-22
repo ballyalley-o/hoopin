@@ -1,5 +1,5 @@
 import { Schema, model } from 'mongoose'
-import { GLOBAL } from 'myapp'
+import { GLOBAL } from 'hoopin'
 import DB_INDEX from 'config/db-index'
 import argon2 from 'argon2'
 import crypto from 'crypto'
