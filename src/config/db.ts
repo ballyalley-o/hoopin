@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'
-import { GLOBAL } from 'myapp'
+import { GLOBAL } from 'hoopin'
 import goodlog from 'good-logs'
 import { User } from 'model'
 
