@@ -2,19 +2,21 @@
 import express from 'express'
 import { App } from 'hoopin'
 import request from 'supertest'
-import { PrismaClient } from '@prisma/client'
 import { randomUUID } from 'crypto'
+import { db, pool } from 'hoopin'
+import { users } from '../db/schema'
 
-const prisma = new PrismaClient()
 
 let app: express.Application
 
 beforeAll(async () => {
+  await db.delete(users)
   app = await App.app()
 })
 
 afterAll(async () => {
-  await prisma.$disconnect()
+  await db.delete(users)
+  await pool.end()
 })
 
 describe('User Route', () => {
@@ -28,8 +30,8 @@ describe('User Route', () => {
     })
 
     expect(res.statusCode).toBe(201)
-    expect(res.body.data).toHaveProperty('_id')
-    userId = res.body.data._id
+    expect(res.body.data).toHaveProperty('id')
+    userId = res.body.data.id
   })
 
   it('should throw unsuccessful response if user already exists', async () => {
@@ -49,7 +51,7 @@ describe('User Route', () => {
   it('should get a user by id', async () => {
     const res = await request(app).get(`/api/v1/auth/user/${userId}`)
     expect(res.statusCode).toBe(200)
-    expect(res.body.data).toHaveProperty('_id', userId)
+    expect(res.body.data).toHaveProperty('id', userId)
   })
 
   it('should update a user', async () => {

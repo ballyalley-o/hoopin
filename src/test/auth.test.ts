@@ -4,7 +4,8 @@ import express from 'express'
 import { App } from 'hoopin'
 import { GLOBAL } from 'config/global'
 import request from 'supertest'
-import mongoose from 'mongoose'
+import { db, pool } from 'hoopin'
+import { users } from '../db/schema'
 
 let app: express.Application
 
@@ -17,13 +18,13 @@ const userPayload = {
 
 describe('Auth Controller', () => {
   beforeAll(async () => {
-    await mongoose.connect(GLOBAL.DB_URI)
+    await db.delete(users)
     app = await App.app()
   })
 
   afterAll(async () => {
-    await mongoose.connection.dropDatabase()
-    await mongoose.disconnect()
+    await db.delete(users)
+    await pool.end()
   })
   it('should create a new user and return a token', async () => {
     const res = await request(app).post('/api/v1/auth/sign-up').send(userPayload)
