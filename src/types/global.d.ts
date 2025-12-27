@@ -1,4 +1,3 @@
-import { PrismaClient } from '@prisma/client'
 import { Request, Response, NextFunction } from 'express'
 
 declare global {
@@ -43,6 +42,4 @@ declare global {
         }
     }
 
-    declare type ModelName = keyof PrismaClient
-    declare type ModelDelegate<M extends ModelName> = NonNullable<PrismaClient[M]>
 }
