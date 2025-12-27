@@ -1,19 +1,19 @@
 import dotenv from 'dotenv'
 dotenv.config()
 
-import { GLOBAL, dbHealthCheck } from 'hoopin'
 import express, { Application } from 'express'
 import goodlog from 'good-logs'
 import cors from 'cors'
 import morgan from 'morgan'
 import cookieParser from 'cookie-parser'
-import mongoSanitize from 'express-mongo-sanitize'
 import helmet from 'helmet'
 import hpp from 'hpp'
 import rateLimit, { Options } from 'express-rate-limit'
 import { ServerStatic, mainRoute } from 'route'
 import { notFound, errorHandler, corsConfig, xssHandler } from 'middleware'
 import { KEY } from 'constant'
+import { GLOBAL } from './global'
+import { dbHealthCheck } from './db.config'
 import { PATH_DIR } from './dir'
 
 const TAG = 'App'
