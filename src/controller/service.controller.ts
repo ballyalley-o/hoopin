@@ -1,14 +1,14 @@
 import { Response } from 'express'
-import { GLOBAL } from 'hoopin'
 import argon2 from 'argon2'
 import crypto from 'crypto'
 import jwt from 'jsonwebtoken'
-import { PrismaClient } from '@prisma/client'
+import { eq } from 'drizzle-orm'
 import goodlog from 'good-logs'
+import bcrypt from 'bcryptjs'
+import { GLOBAL, db } from 'hoopin'
+import { users } from '../db/schema'
 import { ErrorResponse } from 'middleware'
 import { CODE, KEY, RESPONSE, Resp, oneDayFromNow } from 'constant'
-
-const prisma = new PrismaClient()
 
 export class Service {
   public static getSignedJwtToken(userId: string) {
@@ -37,7 +37,7 @@ export class Service {
   }
 
   public static async sendTokenResponse(user: any, code: CODE, res: Response) {
-    const token   = user.getSignedJwtToken()
+    const token   = Service.getSignedJwtToken(user.id)
     const options = {
       expires : GLOBAL.COOKIE.EXP,
       httpOnly: true,
@@ -70,13 +70,22 @@ export class Service {
   }
 
   public static async createUser(data: any) {
-    const hashedPassword = await Service.hashPassword(data.password)
-    const newUser        = prisma.user.create({ data: { password: hashedPassword, ...data } })
+    const [existing] = await db.select({ id: users.id }).from(users).where(eq(users.email, data.email))
+    if (existing) {
+      throw new ErrorResponse(RESPONSE.ERROR.DOCUMENT_EXISTS, CODE.CONFLICT)
+    }
+
+    if (!data.password) {
+      throw new ErrorResponse(RESPONSE.ERROR.INVALID_CREDENTIALS, CODE.BAD_REQUEST)
+    }
+
+    const hashedPassword = await bcrypt.hash(data.password, GLOBAL.HASH.SALT_ROUNDS)
+    const [newUser]      = await db.insert(users).values({ ...data, password: hashedPassword }).returning()
     return newUser
   }
 
   public static async updateUser(userId: string, data: any) {
-    const updatedUser = await prisma.user.update({ where: { id: userId }, data })
+    const [updatedUser] = await db.update(users).set({ ...data }).where(eq(users.id, userId)).returning()
     if (!updatedUser) {
       throw new ErrorResponse(RESPONSE.ERROR.FAILED_FIND, CODE.NOT_FOUND)
     }
@@ -84,7 +93,7 @@ export class Service {
   }
 
   public static async deleteUser(userId: string) {
-    const deletedUser = await prisma.user.delete({ where: { id: userId }})
+    const [deletedUser] = await db.delete(users).where(eq(users.id, userId)).returning()
     if (!deletedUser) {
       throw new ErrorResponse(RESPONSE.ERROR.FAILED_FIND, CODE.NOT_FOUND)
     }
