@@ -1,9 +1,9 @@
 import { Request, Response, NextFunction } from 'express'
-import { PrismaClient } from '@prisma/client'
+import { eq } from 'drizzle-orm'
+import { db } from 'hoopin'
 import { Service } from 'controller'
 import { CODE, Resp, RESPONSE } from 'constant'
-
-const prisma = new PrismaClient()
+import { users } from '../db/schema'
 
 const TAG = 'User.Controller'
 export class UserController {
@@ -17,7 +17,7 @@ export class UserController {
 
     public static async getUser(req:Request, res: Response, _next: NextFunction) {
         try {
-            const user = await prisma.user.findUnique({ where: { id: req.params.id }})
+            const [user] = await db.select().from(users).where(eq(users.id, req.params.id))
             res.status(CODE.OK).send(Resp.Ok(user))
         } catch (error: any) {
             Service.catchError(error, TAG, 'getUser', res)
@@ -45,6 +45,8 @@ export class UserController {
     public static async deleteUser(req: Request, res: Response, _next: NextFunction) {
         try {
             const userId      = req.params.id
+
+            console.log('userId', userId)
             const deletedUser = await Service.deleteUser(userId)
             res.status(CODE.OK).send(Resp.Ok(deletedUser, 0, RESPONSE.SUCCESS.DELETED))
         } catch (error: any) {
