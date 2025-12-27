@@ -10,7 +10,7 @@ import { users } from '../db/schema'
 let app: express.Application
 
 const userPayload = {
-  firstname: 'Test_automated',
+  firstname: 'Test_automated_2',
   lastname : 'bimby',
   email    : 'bimby-test-5@test.com',
   password : '123456',
@@ -67,7 +67,7 @@ describe('Auth Controller', () => {
     })
 
     it('should get logged-in user\'s account when authenticated', async () => {
-      const res = await request(app).get('/api/v1/auth/account').set('Cookie', `${GLOBAL.COOKIE.NAME}=${token}`)
+      const res = await request(app).get('/api/v1/auth/account').set('Cookie', `${GLOBAL.COOKIE.NAME}=${token}`).set('Authorization', `Bearer ${token}`).set('token', token)
       expect(res.statusCode).toBe(200)
       expect(res.body.success).toBe(true)
       expect(res.body.data.email).toBe(userPayload.email)
