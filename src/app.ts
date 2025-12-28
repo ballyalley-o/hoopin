@@ -1,3 +1,3 @@
-import { App } from 'hoopin'
+import { App } from 'gameover'
 
 App.app()
