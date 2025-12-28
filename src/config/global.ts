@@ -2,7 +2,7 @@ import dotenv from 'dotenv'
 dotenv.config()
 
 export const GLOBAL = {
-  APP_NAME       : process.env.APP_NAME || 'hoopin',
+  APP_NAME       : process.env.APP_NAME || 'gameover',
   ENV            : process.env.ENV || 'development',
   PORT           : process.env.PORT || 3007,
   API_URL        : process.env.API_URL || '',
@@ -13,7 +13,7 @@ export const GLOBAL = {
     EXP :  new Date(Date.now() + 24 * 60 * 60 * 1000),
   },
   DB_URI    : `${process.env.DB_PROTOCOL}://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_HOST}/${process.env.DB_NAME}?sslmode=require` || '',
-  DB_NAME   : process.env.DB_NAME || 'hoopin-db',
+  DB_NAME   : process.env.DB_NAME || 'gameover-db',
   DB_HOST   : process.env.DB_HOST || '',
   ENCRYPTION: {
     ENCODING: process.env.ENCRYPTION_ENCODING || '',
