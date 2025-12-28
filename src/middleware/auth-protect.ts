@@ -1,4 +1,4 @@
-import { GLOBAL, db } from 'hoopin'
+import { GLOBAL, db } from 'gameover'
 import { Response, NextFunction  } from 'express'
 import { eq } from 'drizzle-orm'
 import jwt from 'jsonwebtoken'
