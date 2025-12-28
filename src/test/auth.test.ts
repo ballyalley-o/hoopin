@@ -1,10 +1,9 @@
 /// <reference types="jest" />
 
 import express from 'express'
-import { App } from 'hoopin'
+import { App, db, pool } from 'gameover'
 import { GLOBAL } from 'config/global'
 import request from 'supertest'
-import { db, pool } from 'hoopin'
 import { users } from '../db/schema'
 
 let app: express.Application

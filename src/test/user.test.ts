@@ -1,9 +1,8 @@
 /// <reference types="jest" />
 import express from 'express'
-import { App } from 'hoopin'
+import { App, db, pool } from 'gameover'
 import request from 'supertest'
 import { randomUUID } from 'crypto'
-import { db, pool } from 'hoopin'
 import { users } from '../db/schema'
 
 
