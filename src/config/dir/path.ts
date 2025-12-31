@@ -7,7 +7,8 @@ export const ROOT = '/'
 
 export const MODULE = {
   AUTH: 'auth',
-  USER: 'user'
+  USER: 'user',
+  GAME: 'game'
 }
 
 const AUTH = {
