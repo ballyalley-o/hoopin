@@ -2,13 +2,15 @@ import dotenv from 'dotenv'
 dotenv.config()
 
 export const GLOBAL = {
-  APP_NAME       : process.env.APP_NAME || 'gameover',
-  ENV            : process.env.ENV || 'development',
-  PORT           : process.env.PORT || 3007,
-  API_URL        : process.env.API_URL || '',
-  API_VERSION    : process.env.API_VERSION || 'v1',
-  ALLOWED_ORIGINS: process.env.ALLOWED_ORIGINS ? process.env.ALLOWED_ORIGINS.split(',').map((s) => s.trim()): [],
-  COOKIE         : {
+  APP_NAME         : process.env.APP_NAME || 'gameover',
+  ENV              : process.env.ENV || 'development',
+  PORT             : process.env.PORT || 3007,
+  API_URL          : process.env.API_URL || '',
+  API_VERSION      : process.env.API_VERSION || 'v1',
+  SPORTSDATA_APIKEY: process.env.SPORTSDATA_APIKEY || '',
+  SPORTSDATA_URL   : process.env.SPORTSDATA_URL || '',
+  ALLOWED_ORIGINS  : process.env.ALLOWED_ORIGINS ? process.env.ALLOWED_ORIGINS.split(',').map((s) => s.trim()): [],
+  COOKIE           : {
     NAME: process.env.COOKIE_NAME || '',
     EXP :  new Date(Date.now() + 24 * 60 * 60 * 1000),
   },
