@@ -8,9 +8,9 @@
     "rootDir"         : "./src",
     "baseUrl"         : "./src",
     "paths"           : {
-      "*"     : ["*"],
+      "*"       : ["*"],
       "gameover": ["config/index.ts"],
-      "route" : ["route/index.ts"]
+      "route"   : ["route/index.ts"]
     },
     "experimentalDecorators"          : true,
     "emitDecoratorMetadata"           : true,
