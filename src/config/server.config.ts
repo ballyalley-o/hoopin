@@ -44,7 +44,7 @@ class App {
     this._app.use(morgan('dev'))
     this._app.use(cookieParser())
     this._app.use(cors(corsConfig))
-    // this._app.use(mongoSanitize({ replaceWith: '_' }))
+
     this._app.use(helmet())
     this._app.use(xssHandler)
     this._app.use(rateLimit(GLOBAL.RATE_LIMIT as Partial<Options>))
