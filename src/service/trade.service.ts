@@ -1,6 +1,6 @@
 import { db } from 'gameover'
 import { and, eq, inArray, sql } from 'drizzle-orm'
-import { CODE, RESPONSE } from 'constant'
+import { CODE, RESPONSE, TRADE_STATUS } from 'constant'
 import { ErrorResponse } from 'middleware'
 import { rosters, teams, trades } from 'db/schema'
 
@@ -74,7 +74,7 @@ export const tradeService = {
     const fromPostSalary = fromCurrentSalary - outgoingFrom + incomingToFrom
     const toPostSalary   = toCurrentSalary - outgoingTo + incomingToTo
 
-    let valid = true
+    let valid  = true
     let reason = ''
 
     if (incomingToFrom > fromAllowed) {
@@ -94,8 +94,8 @@ export const tradeService = {
     return {
       valid,
       reason: reason || undefined,
-      from : { outgoing: outgoingFrom, incoming: incomingToFrom, allowedIncoming: fromAllowed, postSalary: fromPostSalary, cap: fromTeam.salaryCap },
-      to   : { outgoing: outgoingTo, incoming: incomingToTo, allowedIncoming: toAllowed, postSalary: toPostSalary, cap: toTeam.salaryCap },
+      from  : { outgoing: outgoingFrom, incoming: incomingToFrom, allowedIncoming: fromAllowed, postSalary: fromPostSalary, cap: fromTeam.salaryCap },
+      to    : { outgoing: outgoingTo, incoming: incomingToTo, allowedIncoming: toAllowed, postSalary: toPostSalary, cap: toTeam.salaryCap },
     }
   },
 
@@ -118,7 +118,7 @@ export const tradeService = {
         incomingIds,
         outgoingSalary: preview.from.outgoing,
         incomingSalary: preview.from.incoming,
-        status        : 'processed',
+        status        : TRADE_STATUS.PROCESSED,
       }).returning()
 
       return { trade: record, preview }
