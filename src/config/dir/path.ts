@@ -1,5 +1,5 @@
 import { GLOBAL } from 'config/global'
-import { connect } from 'utility'
+import { combine } from 'utility'
 
 export const API = '/api'
 export const ID = '/:id'
@@ -19,11 +19,11 @@ const AUTH = {
 }
 
 export const PATH_DIR = {
-  ACCOUNT    : connect(AUTH.ACCOUNT),
-  API_WELCOME: connect(API, GLOBAL.API_VERSION),
-  ID         : connect(ID),
-  ROOT       : connect(ROOT),
-  SIGN_IN    : connect(AUTH.SIGN_IN),
-  SIGN_OUT   : connect(AUTH.SIGN_OUT),
-  SIGN_UP    : connect(AUTH.SIGN_UP)
+  ACCOUNT    : combine(AUTH.ACCOUNT),
+  API_WELCOME: combine(API, GLOBAL.API_VERSION),
+  ID         : combine(ID),
+  ROOT       : combine(ROOT),
+  SIGN_IN    : combine(AUTH.SIGN_IN),
+  SIGN_OUT   : combine(AUTH.SIGN_OUT),
+  SIGN_UP    : combine(AUTH.SIGN_UP)
 }
