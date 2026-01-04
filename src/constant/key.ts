@@ -10,3 +10,10 @@ export const KEY = {
   SCRIPT             : 'script',
   UNHANDLED_REJECTION: 'unhandledRejection',
 }
+
+export const TRADE_STATUS = {
+  PROPOSED : 'proposed',
+  PROCESSED: 'processed',
+  ACCEPTED : 'accepted',
+  REJECTED : 'rejected',
+}
