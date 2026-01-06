@@ -1,6 +1,7 @@
-import { GLOBAL } from 'gameover'
 import type { LineupSlot } from 'types/game'
 import { pgEnum, pgTable, boolean, index, integer, jsonb, smallint, text, timestamp, uniqueIndex, uuid, varchar } from 'drizzle-orm/pg-core'
+
+const _SALARY_CAP_DEFAULT = 136000000
 
 export const positionEnum = pgEnum('position', ['PG', 'SG', 'SF', 'PF', 'C'])
 export const archetypeEnum = pgEnum('archetype', [
@@ -54,7 +55,7 @@ export const teams = pgTable('teams', {
   name          : varchar('name', { length: 255 }).notNull(),
   market        : varchar('market', { length: 255 }),
   styleTags     : text('style_tags').array(),
-  salaryCap     : integer('salary_cap').notNull().default(GLOBAL.SALARY.CAP_DEFAULT),
+  salaryCap     : integer('salary_cap').notNull().default(_SALARY_CAP_DEFAULT),
   hardCapActive : boolean('hard_cap_active').notNull().default(false),
   createdAt     : timestamp('created_at', { withTimezone: false, mode: 'date' }).notNull().defaultNow(),
   updatedAt     : timestamp('updated_at', { withTimezone: false, mode: 'date' }).notNull().defaultNow().$onUpdate(() => new Date()),
