@@ -9,7 +9,7 @@ export const GLOBAL = {
   API_VERSION      : process.env.API_VERSION || 'v1',
   SPORTSDATA_APIKEY: process.env.SPORTSDATA_APIKEY || '',
   SPORTSDATA_URL   : process.env.SPORTSDATA_URL || '',
-  SPORTSDATA_HEADER: process.env.SPORTSDATA_HEADER || '',
+  SPORTSDATA_HEADER: process.env.SPORTSDATA_HEADER || 'Ocp-Apim-Subscription-Key',
   ALLOWED_ORIGINS  : process.env.ALLOWED_ORIGINS ? process.env.ALLOWED_ORIGINS.split(',').map((s) => s.trim()): [],
   COOKIE           : {
     NAME: process.env.COOKIE_NAME || '',
