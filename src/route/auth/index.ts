@@ -6,6 +6,7 @@ import { combine } from 'utility'
 
 
 export const linkAuthRoute = (app: Application, apiVer: string) => {
-    app.use(combine(apiVer, MODULE.AUTH), authRoute)
-    app.use(combine(apiVer, MODULE.AUTH, MODULE.USER), userRoute)
+    const base = combine(apiVer, MODULE.AUTH)
+    app.use(base, authRoute)
+    app.use(combine(base, MODULE.USER), userRoute)
 }
