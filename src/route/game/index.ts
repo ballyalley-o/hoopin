@@ -11,13 +11,13 @@ const router = Router({ mergeParams: true })
 
 export const linkGameRoute = (app: Application, apiVer: string) => {
   const base = combine(apiVer, MODULE.GAME)
-  router.use(combine('player'), playerRoute)
-  router.use(combine('team'), teamRoute)
-  router.use(combine('lineup'), lineupRoute)
-  router.use(combine('games'), simRoute)
-  router.use(combine('trades'), tradeRoute)
+  router.use(combine(base, 'player'), playerRoute)
+  router.use(combine(base, 'team'), teamRoute)
+  router.use(combine(base, 'lineup'), lineupRoute)
+  router.use(combine(base, 'games'), simRoute)
+  router.use(combine(base, 'trades'), tradeRoute)
 
-  app.use(base, router)
+  app.use(router)
 }
 
 export default router
