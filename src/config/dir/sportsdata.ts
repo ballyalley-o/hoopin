@@ -1,5 +1,4 @@
 import { GLOBAL } from 'config/global'
-import { TEAM_ABBR_NBA } from 'constant'
 import type { TeamAbbrNBA } from 'constant'
 import { combineURL } from 'utility'
 
@@ -21,6 +20,7 @@ const _BOXSCORE                       = 'boxscore'
 const _BOXSCORES                      = 'boxscores'
 const _BOXSCORES_DELTA                = 'boxscoresdelta'
 const _BOXSCORE_FINAL                 = 'boxscorefinal'
+const _BOXSCORES_FINAL                = 'boxscoresfinal'
 const _DEPTH_CHARTS                   = 'depthcharts'
 const _FREEAGENTS                     = 'freeagents'
 const _INJURED_PLAYERS                = 'injuredplayers'
@@ -81,7 +81,7 @@ export const SPORTSDATA_DIR = {
   BOXSCORES_BY_DATE_LIVE         : (date: string) => _combineNBAStats(_BOXSCORES, date),
   BOXSCORES_DELTA_BY_DATE_LIVE   : (date: string, min: string) => _combineNBAStats(_BOXSCORES_DELTA, date, min),
   BOXSCORE_BY_GAMEID_FINAL       : (gameId: string) => _combineNBAStats(_BOXSCORE_FINAL, gameId),
-  BOXSCORE_BY_DATE_FINAL         : (gameId: string) => _combineNBAStats(_BOXSCORE_FINAL, gameId),
+  BOXSCORES_BY_DATE_FINAL        : (date: string) => _combineNBAStats(_BOXSCORES_FINAL, date),
   DEPTH_CHARTS                   : _combineNBAScores(_DEPTH_CHARTS),
   FREEAGENTS                     : _combineNBAScores(_FREEAGENTS),
   HEADSHOTS                      : _combineNBAHeadshots(_MODULE_HEADSHOTS),
@@ -90,9 +90,8 @@ export const SPORTSDATA_DIR = {
   SCORES_BASIC_BY_DATE_FINAL     : (date: string) => _combineNBAScores(_SCORES_BASIC_FINAL, date),
   GAMES_BY_DATE                  : (date: string) => _combineNBAScores(_GAMES_BY_DATE, date),
   GAMES_BY_DATE_FINAL            : (date: string) => _combineNBAScores(_GAMES_BY_DATE_FINAL, date),
-  STANDINGS                      : (season: string) => _combineNBAScores(_STANDINGS, season),
-  TEAM_ALL                       : _combineNBAScores(_STANDINGS, _ALL_TEAMS),
-  TEAM_ACTIVE                    : _combineNBAScores(_STANDINGS, _TEAMS),
+  TEAM_ALL                       : _combineNBAScores(_ALL_TEAMS),
+  TEAM_ACTIVE                    : _combineNBAScores(_TEAMS),
   TEAM_BY_SEASON                 : (season: string) => _combineNBAScores(_TEAMS, season),
   TEAM_SEASONSTATS               : (season: string) => _combineNBAScores(_TEAM_SEASONSTATS, season),
   TEAM_STATS_ALLOWED_BY_POSITION : (season: string) => _combineNBAScores(_TEAM_STATS_ALLOWED_BY_POSITION, season),
@@ -118,6 +117,7 @@ export const SPORTSDATA_DIR = {
   PLAYER_GAMESTATS_BY_SEASON     : (season: string, playerId: string, numOfGames: string = 'all') => _combineNBAStats(_PLAYER_GAMESTATS_BY_SEASON, season, playerId, numOfGames),
   PLAYERS_GAMESTATS_BY_DATE_FINAL: (date: string) => _combineNBAStats(_PLAYER_GAMESTATS_BY_DATE_FINAL, date),
   STADIUMS                       : _combineNBAScores(_STADIUMS),
+  STANDING                       : (season: string) => _combineNBAScores(_STANDINGS, season),
   STARTING_LINEUPS_BY_DATE       : (date: string) => _combineNBAProjections(_STARTING_LINEUPS_BY_DATE, date),
   SCHEDULES                      : (season: string) => _combineNBAScores(_SCHEDULES_BASIC, season),
   TRANSACTIONS                   : (date: string) => _combineNBAScores(_TRANSACTIONS_BY_DATE, date)
