@@ -1,6 +1,5 @@
 import axios from 'axios'
 import { SPORTSDATA_DIR, sportsdataHeaders } from 'config/dir/sportsdata'
-import { slugigy } from 'utility'
 
 export const sourceService = {
   async getPlayerActiveAll() {
