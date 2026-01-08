@@ -1,7 +1,10 @@
+import { en, fr, es } from 'locale'
 import { Request, Response, NextFunction } from 'express'
 
 declare global {
     declare type RequestHandler = (req : Request, res : Response, next: NextFunction) => void
+
+    declare type AppLocale = typeof en | typeof fr | typeof es
 
     declare interface IConnect { (...params: string[]): string }
 
