@@ -8,6 +8,7 @@ const _axiosGET = async (url: string) => {
 }
 
 export const sourceService = {
+  // Player
   async getPlayerActiveAll() {
     const url      = SPORTSDATA_DIR.PLAYERS_ACTIVE
     const { data } = await _axiosGET(url)
@@ -32,6 +33,7 @@ export const sourceService = {
     return data
   },
 
+  // Team
   async getTeamAll() {
     const url      = SPORTSDATA_DIR.TEAM_ALL
     const { data } = await _axiosGET(url)
@@ -44,6 +46,7 @@ export const sourceService = {
     return data
   },
 
+  // Score
   async getScoreAllByDate(date: string) {
     const url      = SPORTSDATA_DIR.SCORES_BASIC_BY_DATE(date)
     const { data } = await _axiosGET(url)
@@ -62,6 +65,7 @@ export const sourceService = {
     return data
   },
 
+  // Boxscore
   async getBoxscoreAllByDateFinal(date: string) {
     const url      = SPORTSDATA_DIR.BOXSCORES_BY_DATE_FINAL(date)
     const { data } = await _axiosGET(url)
