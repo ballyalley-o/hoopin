@@ -33,6 +33,7 @@ export const GLOBAL = {
     windowMs: 10 * 60 * 1000,
     max     : process.env.MAX_RATE_LIMIT
   },
+  LOCALE           : process.env.LOCALE_LANG || "en",
   LOG_LEVEL        : 'info',
   LOG_FILENAME_ERR : 'log/error.log',
   LOG_FILENAME_COMB: 'log/combined.log',
