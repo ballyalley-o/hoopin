@@ -1,3 +1,3 @@
 export * from './combine'
-export * from './locale'
+export * from './transl'
 export * from './slugify'

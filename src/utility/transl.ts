@@ -1,12 +1,11 @@
-import { en, fr } from 'locale'
+import { locales } from 'config/locale.config'
 
 type NestedKeys<T> = {
-    [K in Extract<keyof T, string>]: T[K] extends Record<string, any> ? `${K}.${NestedKeys<T[K]>}` : K
-}[Extract<keyof T, string>]
+  [K in keyof T & string]: T[K] extends string ? K : T[K] extends Record<string, unknown> ? `${K}.${NestedKeys<T[K]>}` : never
+}[keyof T & string]
 
-type  LocaleLang = 'en' | 'fr'
-type  LocaleKey  = NestedKeys<typeof en>
-const locales    = { en, fr }
+type  LocaleLang = keyof typeof locales
+type  LocaleKey  = NestedKeys<AppLocale>
 
 /**
  * Retrieves a localized message based on the provided key and optional parameters.
@@ -24,9 +23,11 @@ const locales    = { en, fr }
  * @returns The localized message with placeholders replaced, or the original key if
  *          the message is not found or is not a string.
  */
-export const getLocale = (key: LocaleKey, params?: Record<string, any>, locale: LocaleLang = 'en'): string => {
+export const transl = (key: LocaleKey, params?: Record<string, string | number | boolean>, locale: LocaleLang = 'en'): string => {
   const messages = locales[locale] || locales['en']
-  let message = key.split('.').reduce((o, i) => (o ? (o as any)[i] : null), messages)
+  const message  = key
+    .split('.')
+    .reduce((o: unknown, i: string) => (o && typeof o === 'object' && i in o ? (o as Record<string, unknown>)[i] : null), messages)
 
   if (!message) {
     return key
@@ -40,10 +41,9 @@ export const getLocale = (key: LocaleKey, params?: Record<string, any>, locale: 
 
   if (params) {
     Object.keys(params).forEach((param) => {
-      result = result.replace(new RegExp(`{${param}}`, 'g'), params[param])
+      result = result.replace(new RegExp(`{${param}}`, 'g'), String(params[param]))
     })
   }
 
   return result
 }
-
