@@ -2,10 +2,12 @@ import { NextFunction, Request, Response } from 'express'
 import { CODE, Resp, TEAM_ABBR_NBA } from 'constant'
 import { sourceService } from 'service/source.service'
 import type { TeamAbbrNBA } from 'constant'
+import { transl } from 'utility'
 import { Service } from './service.controller'
 
 const TAG = 'Source.Controller'
 export class SourceController {
+    // Player
     public static async getPlayerActiveAll(_req: Request, res: Response, _next: NextFunction): Promise<void> {
         try {
             const players = await sourceService.getPlayerActiveAll()
@@ -28,7 +30,7 @@ export class SourceController {
             const teamParam = typeof req.query.team === 'string' ? req.query.team.toUpperCase() : ''
 
             if (!teamParam || !(teamParam in TEAM_ABBR_NBA)) {
-                res.status(CODE.BAD_REQUEST).json(Resp.Error('Invalid team provided; expected NBA 3-letter format (e.g. CLE, MIA)', CODE.BAD_REQUEST))
+                res.status(CODE.BAD_REQUEST).json(Resp.Error(transl('error.invalid_team_abbr'), CODE.BAD_REQUEST))
                 return
             }
             const players = await sourceService.getPlayerAllByTeam(teamParam as TeamAbbrNBA)
@@ -49,20 +51,21 @@ export class SourceController {
 
     public static async getAllStarAll(req: Request, res: Response, _next: NextFunction): Promise<void> {
         try {
-            const { year } = req.body
-            const yearRegex = /^\d{4}(PRE|POST|STAR)?$/
-            if (!year || !yearRegex.test(year)) {
-                res.status(CODE.BAD_REQUEST).json(Resp.Error('Invalid format; use YYYY, YYYYPRE, YYYYPOST or YYYYSTAR', CODE.BAD_REQUEST))
+            const { season } = req.query
+            const seasonRegex = /^\d{4}(PRE|POST|STAR)?$/
+            if (!season || !seasonRegex.test(String(season))) {
+                res.status(CODE.BAD_REQUEST).json(Resp.Error(transl('error.invalid_season_format'), CODE.BAD_REQUEST))
                 return
             }
 
-            const allStars   = await sourceService.getAllStarAll(year)
+            const allStars   = await sourceService.getAllStarAll(season as string)
             res.status(CODE.OK).json(Resp.Ok(allStars, Array.isArray(allStars) ? allStars.length : undefined))
         } catch (error) {
             Service.catchError(error, TAG, 'getAllStarAll', res)
         }
     }
 
+    // Team
     public static async getTeamAll(req: Request, res: Response, _next: NextFunction): Promise<void> {
         try {
             const teams = await sourceService.getTeamAll()
@@ -81,12 +84,13 @@ export class SourceController {
         }
     }
 
+    // Score
     public static async getScoreAllByDate(req: Request, res: Response, _next: NextFunction): Promise<void> {
         try {
             const { date }  = req.query
             const dateRegex = /\d{4}-\d{2}-\d{2}/
             if (!date || !dateRegex.test(String(date))) {
-                res.status(CODE.BAD_REQUEST).json(Resp.Error('Invalid date provided; expected date YYYY-MM-DD or YYYY-MMM-DD format (e.g. 2025-01-25, 2025-JAN-12)', CODE.BAD_REQUEST))
+                res.status(CODE.BAD_REQUEST).json(Resp.Error(transl('error.invalie_date_format'), CODE.BAD_REQUEST))
                 return
             }
             const scores = await sourceService.getScoreAllByDate(date as string)
@@ -101,7 +105,7 @@ export class SourceController {
             const { date }  = req.query
             const dateRegex = /\d{4}-\d{2}-\d{2}/
             if (!date || !dateRegex.test(String(date))) {
-                res.status(CODE.BAD_REQUEST).json(Resp.Error('Invalid date provided; expected date YYYY-MM-DD or YYYY-MMM-DD format (e.g. 2025-01-25, 2025-JAN-12)', CODE.BAD_REQUEST))
+                res.status(CODE.BAD_REQUEST).json(Resp.Error(transl('error.invalie_date_format'), CODE.BAD_REQUEST))
                 return
             }
             const scores = await sourceService.getScoreAllByDate(date as string)
@@ -116,7 +120,7 @@ export class SourceController {
             const { date } =  req.query
             const dateRegex = /\d{4}-\d{2}-\d{2}/
             if (!date || !dateRegex.test(String(date))) {
-                res.status(CODE.BAD_REQUEST).json(Resp.Error('Invalid date provided; expected date YYYY-MM-DD or YYYY-MMM-DD format (e.g. 2025-01-25, 2025-JAN-12)', CODE.BAD_REQUEST))
+                res.status(CODE.BAD_REQUEST).json(Resp.Error(transl('error.invalie_date_format'), CODE.BAD_REQUEST))
                 return
             }
             const boxscores = await sourceService.getBoxscoreAllByDateFinal(date as string)
@@ -131,7 +135,7 @@ export class SourceController {
             const { season } = req.query
             const seasonRegex = /^\d{4}(PRE|POST|STAR)?$/
             if (!season || !seasonRegex.test(String(season))) {
-                res.status(CODE.BAD_REQUEST).json(Resp.Error('Invalid format; use YYYY, YYYYPRE, YYYYPOST or YYYYSTAR', CODE.BAD_REQUEST))
+                res.status(CODE.BAD_REQUEST).json(Resp.Error(transl('error.invalid_season_format'), CODE.BAD_REQUEST))
                 return
             }
             const schedules = await sourceService.getScheduleAll(season as string)
@@ -146,7 +150,7 @@ export class SourceController {
             const { season } = req.query
             const seasonRegex = /^\d{4}(PRE)?$/
             if (!season || !seasonRegex.test(String(season))) {
-                res.status(CODE.BAD_REQUEST).json(Resp.Error('Invalid format; use YYYY or YYYYPRE', CODE.BAD_REQUEST))
+                res.status(CODE.BAD_REQUEST).json(Resp.Error(transl('error.invalid_season_format_short'), CODE.BAD_REQUEST))
                 return
             }
             const standing = await sourceService.getStanding(season as string)
@@ -159,6 +163,21 @@ export class SourceController {
 
     public static async getNewsAll(_req: Request, res: Response, _next: NextFunction) {
         try {
+            const news = await sourceService.getNewsAll()
+            res.status(CODE.OK).json(Resp.Ok(news, Array.isArray(news) ? news.length : undefined))
+        } catch (error) {
+            Service.catchError(error, TAG, 'getNewsAll', res)
+        }
+    }
+
+    public static async getTransactionAll(req: Request, res: Response, _next: NextFunction) {
+        try {
+            const { date }  = req.query
+            const dateRegex = /\d{4}-\d{2}-\d{2}/
+            if (!date || !dateRegex.test(String(date))) {
+                res.status(CODE.BAD_REQUEST).json(Resp.Error(transl('error.invalie_date_format'), CODE.BAD_REQUEST))
+                return
+            }
             const news = await sourceService.getNewsAll()
             res.status(CODE.OK).json(Resp.Ok(news, Array.isArray(news) ? news.length : undefined))
         } catch (error) {
