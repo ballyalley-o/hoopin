@@ -1,8 +1,8 @@
+import { db, pool } from 'gameover'
 import argon2 from 'argon2'
 import goodlog from 'good-logs'
-import { db, pool } from 'gameover'
-import { users } from './db/schema'
 import { RESPONSE } from 'constant'
+import { users } from './db/schema'
 
 const TAG = 'Seed'
 
