@@ -13,7 +13,8 @@ export const fr = {
     "invalid_team_abbr": "Équipe invalide fournie ; expected NBA 3-letter format (e.g. CLE, MIA)",
     "invalid_season_format": "Format invalide ; utilisez AAAA, YYYYPRE, YYYYPOST ou YYYYSTAR",
     "invalie_date_format": "Date fournie invalide ; date prévue au format AAAA-MM-JJ ou AAAA-MMM-JJ (par exemple 2025-01-25, 2025-JAN-12)",
-    "invalid_season_format_short": "Format invalide ; utilisez AAAA ou AAAAPRÉ"
+    "invalid_season_format_short": "Format invalide ; utilisez AAAA ou AAAAPRÉ",
+    "invalid_data_response": "Réponse de données invalide"
   },
   "validation": {
     "default": {
