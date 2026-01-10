@@ -48,7 +48,8 @@ export const errorHandler = (err: ErrorRequestHandler, _req: Request, res: Respo
  }
 
  res.status(statusCode).json({
-    message: message || errors,
-    stack: GLOBAL.ENV === KEY.PRODUCTION ? err.stack : null
+   message: message || errors,
+   stack  : GLOBAL.ENV === KEY.PRODUCTION ? err.stack: null,
+   errors
  })
 }
