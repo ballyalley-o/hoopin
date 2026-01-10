@@ -6,10 +6,10 @@ export const ID = '/:id'
 export const ROOT = '/'
 
 export const MODULE = {
-  AUTH  : 'auth',
-  USER  : 'user',
-  GAME  : 'game',
-  SOURCE: 'source'
+  AUTH: 'auth',
+  USER: 'user',
+  GAME: 'game',
+  FEED: 'feed'
 }
 
 const AUTH = {
