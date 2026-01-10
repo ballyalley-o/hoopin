@@ -1,0 +1,1 @@
+ALTER TABLE "players" ALTER COLUMN "player_id" DROP NOT NULL;

@@ -29,6 +29,48 @@
       "when": 1767949139989,
       "tag": "0003_updated-player",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1768022227368,
+      "tag": "0004_updated-player-playerId",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1768022550737,
+      "tag": "0005_revert-playerId--type",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1768024497664,
+      "tag": "0006_fix-user-table-name-to-user",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1768026465572,
+      "tag": "0007_updated-player-playerId-type-02",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1768028180145,
+      "tag": "0008_updated-player-playerId-type-03",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1768044931858,
+      "tag": "0009_updated-playerId-to-varchar",
+      "breakpoints": true
     }
   ]
 }
