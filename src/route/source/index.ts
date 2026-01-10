@@ -6,8 +6,8 @@ import sportsDataRoute from './sportsdata'
 
 const router = Router({ mergeParams: true })
 
-export const linkSourceRoute = (app: Application, apiVer: string) => {
-    const base = combine(apiVer, MODULE.SOURCE)
+export const linkFeedRoute = (app: Application, apiVer: string) => {
+    const base = combine(apiVer, MODULE.FEED)
     router.use(combine('sportsdata'), sportsDataRoute)
 
     app.use(base, router)
