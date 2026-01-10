@@ -26,9 +26,10 @@ export class ErrorResponse extends Error {
 }
 
 export const errorHandler = (err: ErrorRequestHandler, _req: Request, res: Response, _next: NextFunction) => {
- let statusCode = err.code || CODE.INTERNAL_SERVER_ERROR
- let message    = err.message
- let errors     = err.errors
+   const normalizedCode = typeof err.code === 'number' ? err.code : CODE.BAD_REQUEST
+   let   statusCode     = normalizedCode || CODE.INTERNAL_SERVER_ERROR
+   let   message        = err.message
+   let   errors         = err.errors
 
  if (err.name === KEY.CAST_ERROR && err.kind === KEY.OBJECT_ID) {
     statusCode = 404
