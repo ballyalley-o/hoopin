@@ -17,10 +17,10 @@ export interface TradePayload {
 }
 
 export interface TradePreview {
-  valid : boolean
+  valid  : boolean
   reason?: string
-  from  : { outgoing: number; incoming: number; allowedIncoming: number; postSalary: number; cap: number }
-  to    : { outgoing: number; incoming: number; allowedIncoming: number; postSalary: number; cap: number }
+  from   : { outgoing: number; incoming: number; allowedIncoming: number; postSalary: number; cap: number }
+  to     : { outgoing: number; incoming: number; allowedIncoming: number; postSalary: number; cap: number }
 }
 
 const allowedIncoming = (outgoing: number) => {
@@ -43,6 +43,7 @@ const fetchRosterEntries = async (teamId: string, playerIds: string[]) => {
 }
 
 export const tradeService = {
+  // async suggest(): Promise<>
   async preview(payload: TradePayload): Promise<TradePreview> {
     const { fromTeamId, toTeamId, outgoingIds, incomingIds } = payload
 
