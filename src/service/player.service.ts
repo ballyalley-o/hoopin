@@ -1,10 +1,10 @@
-import { and, eq, ilike } from 'drizzle-orm'
+import { and, eq, ilike, sql } from 'drizzle-orm'
 import { db } from 'gameover'
 import { players } from 'db/schema'
 import type { DrizzlePlayer, NewDrizzlePlayer } from 'types/schema'
 
 export interface PlayerFilters {
-  name     ?: string
+  fullName ?: string
   archetype?: string
   position ?: string
 }
@@ -12,8 +12,10 @@ export interface PlayerFilters {
 export const playerService = {
   async list(filters: PlayerFilters = {}): Promise<DrizzlePlayer[]> {
     const conditions = []
-    if (filters.name) {
-      conditions.push(ilike(players.name, `%${filters.name}%`))
+
+    const fullName = sql`concat(${players.firstName}, ' ', ${players.lastName})`
+    if (filters.fullName) {
+      conditions.push(ilike(fullName, `%${filters.fullName}%`))
     }
     if (filters.archetype) {
       conditions.push(eq(players.archetype, filters.archetype as any))
