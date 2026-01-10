@@ -1,9 +1,10 @@
 import type { LineupSlot } from 'types/game'
 import { pgEnum, pgTable, boolean, index, integer, jsonb, smallint, text, timestamp, uniqueIndex, uuid, varchar } from 'drizzle-orm/pg-core'
 
-const _SALARY_CAP_DEFAULT = 136000000
+const  _SALARY_CAP_DEFAULT = 136000000
+export type PositionType   = 'PG'| 'SG' | 'SF' | 'PF' | 'C'
 
-export const positionEnum = pgEnum('position', ['PG', 'SG', 'SF', 'PF', 'C'])
+export const positionEnum  = pgEnum('position', ['PG', 'SG', 'SF', 'PF', 'C'])
 export const archetypeEnum = pgEnum('archetype', [
   'playmaker',
   'sharpshooter',
@@ -13,8 +14,10 @@ export const archetypeEnum = pgEnum('archetype', [
   'stretch_big',
   'rebounder',
   'utility',
+  'unknown'
 ])
 export const gameStatusEnum = pgEnum('game_status', ['scheduled', 'completed', 'simulated'])
+export const statusEnum     = pgEnum('status', ['Active', 'Inactive'])
 
 export const users = pgTable('user', {
   id           : uuid('id').defaultRandom().primaryKey(),
@@ -30,9 +33,12 @@ export const users = pgTable('user', {
 
 export const players = pgTable('players', {
   id          : uuid('id').defaultRandom().primaryKey(),
-  name        : varchar('name', { length: 255 }).notNull(),
-  archetype   : archetypeEnum('archetype').notNull(),
+  playerId    : varchar('player_id', { length: 64 }).notNull(),
+  firstName   : varchar('first_name', { length: 255 }).notNull(),
+  lastName    : varchar('last_name', { length: 255 }).notNull(),
+  archetype   : archetypeEnum('archetype').default('unknown'),
   positions   : positionEnum('positions').array().notNull(),
+  status      : statusEnum('status').default('Active'),
   heightInches: smallint('height_inches'),
   weightLbs   : smallint('weight_lbs'),
   overall     : smallint('overall'),
@@ -44,21 +50,25 @@ export const players = pgTable('players', {
   pace        : smallint('pace'),
   clutch      : smallint('clutch'),
   stamina     : smallint('stamina'),
+  salary      : integer('salary'),
   injuryRisk  : varchar('injury_risk', { length: 16 }),
   createdAt   : timestamp('created_at', { withTimezone: false, mode: 'date' }).notNull().defaultNow(),
-  updatedAt   : timestamp('updated_at', { withTimezone: false, mode: 'date' }).notNull().defaultNow().$onUpdate(() => new Date()),
+  updatedAt   : timestamp('updated_at', { withTimezone: false, mode: 'date' })
+    .notNull()
+    .defaultNow()
+    .$onUpdate(() => new Date()),
 })
 
 export const teams = pgTable('teams', {
-  id            : uuid('id').defaultRandom().primaryKey(),
-  ownerUserId   : uuid('owner_user_id').references(() => users.id, { onDelete: 'set null' }),
-  name          : varchar('name', { length: 255 }).notNull(),
-  market        : varchar('market', { length: 255 }),
-  styleTags     : text('style_tags').array(),
-  salaryCap     : integer('salary_cap').notNull().default(_SALARY_CAP_DEFAULT),
-  hardCapActive : boolean('hard_cap_active').notNull().default(false),
-  createdAt     : timestamp('created_at', { withTimezone: false, mode: 'date' }).notNull().defaultNow(),
-  updatedAt     : timestamp('updated_at', { withTimezone: false, mode: 'date' }).notNull().defaultNow().$onUpdate(() => new Date()),
+  id           : uuid('id').defaultRandom().primaryKey(),
+  ownerUserId  : uuid('owner_user_id').references(() => users.id, { onDelete: 'set null' }),
+  name         : varchar('name', { length: 255 }).notNull(),
+  market       : varchar('market', { length: 255 }),
+  styleTags    : text('style_tags').array(),
+  salaryCap    : integer('salary_cap').notNull().default(_SALARY_CAP_DEFAULT),
+  hardCapActive: boolean('hard_cap_active').notNull().default(false),
+  createdAt    : timestamp('created_at', { withTimezone: false, mode: 'date' }).notNull().defaultNow(),
+  updatedAt    : timestamp('updated_at', { withTimezone: false, mode: 'date' }).notNull().defaultNow().$onUpdate(() => new Date()),
 }, (table) => ({
   ownerIdx: index('idx_teams_owner').on(table.ownerUserId),
 }))
@@ -73,23 +83,23 @@ export const rosters = pgTable('rosters', {
   createdAt  : timestamp('created_at', { withTimezone: false, mode: 'date' }).notNull().defaultNow(),
   updatedAt  : timestamp('updated_at', { withTimezone: false, mode: 'date' }).notNull().defaultNow().$onUpdate(() => new Date()),
 }, (table) => ({
-  teamIdx      : index('idx_rosters_team').on(table.teamId),
-  playerIdx    : index('idx_rosters_player').on(table.playerId),
-  teamPlayerUq : uniqueIndex('uq_rosters_team_player').on(table.teamId, table.playerId),
+  teamIdx     : index('idx_rosters_team').on(table.teamId),
+  playerIdx   : index('idx_rosters_player').on(table.playerId),
+  teamPlayerUq: uniqueIndex('uq_rosters_team_player').on(table.teamId, table.playerId),
 }))
 
 export const lineups = pgTable('lineups', {
-  id        : uuid('id').defaultRandom().primaryKey(),
-  teamId    : uuid('team_id').notNull().references(() => teams.id, { onDelete: 'cascade' }),
-  name      : varchar('name', { length: 255 }).notNull(),
-  slots     : jsonb('slots').$type<LineupSlot[]>().notNull(),
-  pacePref  : smallint('pace_pref'),
-  styleTags : text('style_tags').array(),
-  createdAt : timestamp('created_at', { withTimezone: false, mode: 'date' }).notNull().defaultNow(),
-  updatedAt : timestamp('updated_at', { withTimezone: false, mode: 'date' }).notNull().defaultNow().$onUpdate(() => new Date()),
+  id       : uuid('id').defaultRandom().primaryKey(),
+  teamId   : uuid('team_id').notNull().references(() => teams.id, { onDelete: 'cascade' }),
+  name     : varchar('name', { length: 255 }).notNull(),
+  slots    : jsonb('slots').$type<LineupSlot[]>().notNull(),
+  pacePref : smallint('pace_pref'),
+  styleTags: text('style_tags').array(),
+  createdAt: timestamp('created_at', { withTimezone: false, mode: 'date' }).notNull().defaultNow(),
+  updatedAt: timestamp('updated_at', { withTimezone: false, mode: 'date' }).notNull().defaultNow().$onUpdate(() => new Date()),
 }, (table) => ({
-  teamIdx    : index('idx_lineups_team').on(table.teamId),
-  teamNameUq : uniqueIndex('uq_lineups_team_name').on(table.teamId, table.name),
+  teamIdx   : index('idx_lineups_team').on(table.teamId),
+  teamNameUq: uniqueIndex('uq_lineups_team_name').on(table.teamId, table.name),
 }))
 
 export const chemistryLinks = pgTable('chemistry_links', {
@@ -153,15 +163,15 @@ export const gameEvents = pgTable('game_events', {
 }))
 
 export const trades = pgTable('trades', {
-  id             : uuid('id').defaultRandom().primaryKey(),
-  fromTeamId     : uuid('from_team_id').notNull().references(() => teams.id, { onDelete: 'cascade' }),
-  toTeamId       : uuid('to_team_id').notNull().references(() => teams.id, { onDelete: 'cascade' }),
-  outgoingIds    : jsonb('outgoing_player_ids').$type<string[]>().notNull(),
-  incomingIds    : jsonb('incoming_player_ids').$type<string[]>().notNull(),
-  outgoingSalary : integer('outgoing_salary').notNull(),
-  incomingSalary : integer('incoming_salary').notNull(),
-  status         : varchar('status', { length: 24 }).notNull().default('processed'),
-  createdAt      : timestamp('created_at', { withTimezone: false, mode: 'date' }).notNull().defaultNow(),
+  id            : uuid('id').defaultRandom().primaryKey(),
+  fromTeamId    : uuid('from_team_id').notNull().references(() => teams.id, { onDelete: 'cascade' }),
+  toTeamId      : uuid('to_team_id').notNull().references(() => teams.id, { onDelete: 'cascade' }),
+  outgoingIds   : jsonb('outgoing_player_ids').$type<string[]>().notNull(),
+  incomingIds   : jsonb('incoming_player_ids').$type<string[]>().notNull(),
+  outgoingSalary: integer('outgoing_salary').notNull(),
+  incomingSalary: integer('incoming_salary').notNull(),
+  status        : varchar('status', { length: 24 }).notNull().default('processed'),
+  createdAt     : timestamp('created_at', { withTimezone: false, mode: 'date' }).notNull().defaultNow(),
 }, (table) => ({
   fromIdx: index('idx_trades_from_team').on(table.fromTeamId),
   toIdx  : index('idx_trades_to_team').on(table.toTeamId),
