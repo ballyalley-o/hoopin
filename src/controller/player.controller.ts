@@ -3,7 +3,7 @@ import { CODE, Resp, RESPONSE } from 'constant'
 import { ErrorResponse } from 'middleware'
 import { playerInsertSchema } from 'db/validator/player'
 import { playerService } from 'service'
-import { sourceService } from 'service/source.service'
+import { feedService } from 'service/feed.service'
 import { transl } from 'utility'
 
 const TAG = 'Player.Controller'
@@ -28,8 +28,8 @@ export class PlayerController {
     res.status(CODE.CREATED).send(Resp.Created(created))
   }
 
-  static async createBasic(req: Request, res: Response): Promise<void> {
-    const players = await sourceService.getPlayerDetailAll()
+  static async createBasic(_req: Request, res: Response): Promise<void> {
+    const players = await feedService.getPlayerDetailAll()
     if (!Array.isArray(players)) {
       res.status(CODE.BAD_REQUEST).json(Resp.Error(transl('error.invalid_data_response')))
       return
