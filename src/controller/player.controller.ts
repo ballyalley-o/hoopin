@@ -1,13 +1,16 @@
 import { Request, Response } from 'express'
 import { CODE, Resp, RESPONSE } from 'constant'
 import { ErrorResponse } from 'middleware'
+import { playerInsertSchema } from 'db/validator/player'
 import { playerService } from 'service'
+import { sourceService } from 'service/source.service'
+import { transl } from 'utility'
 
 const TAG = 'Player.Controller'
 export class PlayerController {
   static async list(req: Request, res: Response) {
     const players = await playerService.list({
-      name     : req.query.name as string,
+      fullName : req.query.fullName as string,
       archetype: req.query.archetype as string,
       position : req.query.position as string,
     })
@@ -23,6 +26,46 @@ export class PlayerController {
   static async create(req: Request, res: Response) {
     const created = await playerService.create(req.body)
     res.status(CODE.CREATED).send(Resp.Created(created))
+  }
+
+  static async createBasic(req: Request, res: Response): Promise<void> {
+    const players = await sourceService.getPlayerDetailAll()
+    if (!Array.isArray(players)) {
+      res.status(CODE.BAD_REQUEST).json(Resp.Error(transl('error.invalid_data_response')))
+      return
+    }
+
+    const playersToInsert = []
+    let   _errors         = []
+    for (const _p of players) {
+      try {
+        const parsed = playerInsertSchema.parse({
+          playerId    : _p.PlayerID,
+          firstName   : _p.FirstName,
+          lastName    : _p.LastName,
+          positions   : _p.Position ? [_p.Position]: [],
+          heightInches: _p.Height,
+          weightLbs   : _p.Weight,
+          salary      : _p.Salary,
+          archetype   : _p.Archetype ? _p.Archetype: 'unknown'
+        })
+
+        playersToInsert.push(parsed)
+
+      } catch (error) {
+        console.log('failed to insert:', error)
+        _errors.push(error)
+      }
+    }
+
+    for (const _payload of playersToInsert) {
+      await playerService.create(_payload)
+    }
+
+    if (playersToInsert.length <= 0) {
+      throw new Error('unable to create')
+    }
+    res.status(CODE.CREATED).send(Resp.Created({ inserted: playersToInsert.length }))
   }
 
   static async update(req: Request, res: Response) {
