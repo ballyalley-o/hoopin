@@ -16,7 +16,7 @@ export const archetypeEnum = pgEnum('archetype', [
 ])
 export const gameStatusEnum = pgEnum('game_status', ['scheduled', 'completed', 'simulated'])
 
-export const users = pgTable('User', {
+export const users = pgTable('user', {
   id           : uuid('id').defaultRandom().primaryKey(),
   firstname    : varchar('firstname', { length: 255 }).notNull(),
   lastname     : varchar('lastname', { length: 255 }),
