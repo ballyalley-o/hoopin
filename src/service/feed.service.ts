@@ -7,7 +7,7 @@ const _axiosGET = async (url: string) => {
   return res
 }
 
-export const sourceService = {
+export const feedService = {
   // Player
   async getPlayerActiveAll() {
     const url      = SPORTSDATA_DIR.PLAYERS_ACTIVE
